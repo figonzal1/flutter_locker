@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_listener/flutter_barcode_listener.dart';
+import 'package:flutter_locker/screens/door_status.dart';
 import 'package:flutter_locker/screens/qr_reader.dart';
 import 'package:flutter_locker/second_screen.dart';
 import 'package:flutter_locker/utils.dart';
@@ -67,61 +68,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late SerialPort port;
-  String? _barcode;
-  late bool visible;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    final ports = SerialPort.getAvailablePorts();
-
-    logger.d(ports);
-
-    port = SerialPort("COM4",
-        openNow: false, BaudRate: 9600, ByteSize: 8, StopBits: 1);
-    openPort();
-  }
-
-  void openPort() {
-    logger.d("Abriendo puerto");
-    port.open();
-
-    if (port.isOpened) {
-      logger.d("Puerto abierto correctamente");
-    } else {
-      logger.e("Apertura de puerto fallido");
-    }
-  }
-
-  void openLocker(String decoded) {
-    logger.d("Abrir puerta");
-
-    if (decoded.contains("kucoin")) {
-      port.writeBytesFromString(hexToString("8A0101119B"));
-    }
-  }
-
-  void tryNavigate() {
-    if (_barcode!.contains("kucoin")) {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (BuildContext context) {
-        return MiVista();
-      }));
-    }
-  }
-
-  String hexToString(String hex) {
-    String result = '';
-    for (int i = 0; i < hex.length; i += 2) {
-      String hexChar = hex.substring(i, i + 2);
-      int charCode = int.parse(hexChar, radix: 16);
-      result += String.fromCharCode(charCode);
-    }
-    return result;
-  }
-
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -167,16 +113,16 @@ class _MyHomePageState extends State<MyHomePage> {
               height: 30,
             ),
             MaterialButton(
+              color: Theme.of(context).colorScheme.inversePrimary,
               onPressed: () {
-                openPort();
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return const DoorStatus();
+                }));
               },
-              child: Text("Abrir puerto"),
+              child: const Text("Door Status"),
             ),
-            MaterialButton(
-              onPressed: () {
-                openLocker("");
-              },
-              child: Text("Abrir cerradura"),
+            SizedBox(
+              height: 20,
             ),
             MaterialButton(
               color: Theme.of(context).colorScheme.inversePrimary,
