@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_listener/flutter_barcode_listener.dart';
+import 'package:flutter_locker/screens/qr_reader.dart';
 import 'package:flutter_locker/second_screen.dart';
 import 'package:flutter_locker/utils.dart';
 import 'package:logger/logger.dart';
@@ -159,7 +160,11 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'Puertos detectados ',
+              "Prototipo QR-SerialPort",
+              style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(
+              height: 30,
             ),
             MaterialButton(
               onPressed: () {
@@ -173,39 +178,15 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               child: Text("Abrir cerradura"),
             ),
-            VisibilityDetector(
-              onVisibilityChanged: (VisibilityInfo info) {
-                visible = info.visibleFraction > 0;
+            MaterialButton(
+              color: Theme.of(context).colorScheme.inversePrimary,
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return QrReader();
+                }));
               },
-              key: Key("visible-detector-key"),
-              child: BarcodeKeyboardListener(
-                onBarcodeScanned: (barcode) {
-                  var decoded = decodeBarCode(barcode);
-
-                  if (!visible) return;
-
-                  openLocker(decoded);
-                  logger.d("BARDODE: $decoded");
-                  setState(() {
-                    _barcode = decoded;
-
-                    
-                    //tryNavigate();
-                  });
-                },
-                useKeyDownEvent: true,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      _barcode == null ? 'SCAN BARCODE' : 'BARCODE: $_barcode',
-                      style: Theme.of(context).textTheme.headlineSmall,
-                    ),
-                  ],
-                ),
-              ),
-            )
+              child: const Text("QR Reader"),
+            ),
           ],
         ),
       ),
