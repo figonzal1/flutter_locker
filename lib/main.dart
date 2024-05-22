@@ -94,9 +94,12 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  void openLocker() {
+  void openLocker(String decoded) {
     logger.d("Abrir puerta");
-    port.writeBytesFromString(hexToString("8A0101119B"));
+
+    if (decoded.contains("kucoin")) {
+      port.writeBytesFromString(hexToString("8A0101119B"));
+    }
   }
 
   void tryNavigate() {
@@ -166,7 +169,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             MaterialButton(
               onPressed: () {
-                openLocker();
+                openLocker("");
               },
               child: Text("Abrir cerradura"),
             ),
@@ -180,11 +183,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   var decoded = decodeBarCode(barcode);
 
                   if (!visible) return;
+
+                  openLocker(decoded);
                   logger.d("BARDODE: $decoded");
                   setState(() {
                     _barcode = decoded;
 
-                    openLocker();
+                    
                     //tryNavigate();
                   });
                 },
