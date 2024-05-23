@@ -80,6 +80,14 @@ class Locker {
     }
   }
 
+  void tryOpenDoor(int motherBoard, int door) {
+    if (port.isOpened) {
+      CommandBuilder builder = CommandBuilder();
+
+      builder.openDoor(motherBoard, door);
+    }
+  }
+
   void disconnect() {
     port.close();
   }

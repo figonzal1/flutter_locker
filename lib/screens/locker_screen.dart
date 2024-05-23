@@ -41,6 +41,8 @@ class _LockerPageState extends State<LockerPageStatus> {
           placaActual = placa.toString();
         });
       });
+
+      //myLocker.tryOpenDoor(1, 1);
     }
 
     setState(() {
@@ -104,7 +106,7 @@ class _LockerPageState extends State<LockerPageStatus> {
                       ),
                     ],
                   )),
-          )
+          ),
         ],
       ),
     );
