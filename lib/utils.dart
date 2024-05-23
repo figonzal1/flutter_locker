@@ -2,7 +2,11 @@ import 'dart:typed_data';
 
 ///Convertir numero decimal a hexadecimal
 /// Ejemplo: Dec '24' -> Hex '18'
-String decToHex(int number) => number.toRadixString(16);
+String decToHex(int number) {
+  String hex = number.toRadixString(16);
+  hex = '0$hex';
+  return hex.substring(hex.length - 2);
+}
 
 ///Convertir hexadecimal a decimal
 /// Ejemplo: '9A' -> 154
@@ -89,5 +93,5 @@ String calculateBCC(String hex) {
     bcc ^= bytes[i];
   }
 
-  return decToHex(bcc);
+  return decToHex(bcc).toUpperCase();
 }

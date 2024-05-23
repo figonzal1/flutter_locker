@@ -1,3 +1,4 @@
+import 'package:flutter_locker/commands.dart';
 import 'package:flutter_locker/utils.dart';
 import 'package:logger/logger.dart';
 import 'package:serial_port_win32/serial_port_win32.dart';
@@ -62,17 +63,24 @@ class Locker {
     }
   }
 
-  Future<void> checkConnectedMotherBoards() async {
+  Future<void> checkConnectedMotherBoards(Callback callback) async {
     if (port.isOpened) {
-      var comandos = ["80 01 00 33 B2", "80 03 00 33 B0"];
+      CommandBuilder builder = CommandBuilder();
+      List<String> comandos = builder.readAllMotherBoards();
 
       for (int i = 0; i < comandos.length; i++) {
+        callback(i + 1);
         logger.d("Enviando commando: ${cleanHex(comandos[i])}");
-        port.writeBytesFromUint8List(hexToUint8List(comandos[i]),timeout: 1000);
+        port.writeBytesFromUint8List(hexToUint8List(comandos[i]),
+            timeout: 1000);
         await Future.delayed(const Duration(seconds: 1));
       }
     } else {
       logger.e("Error al consultar estados de placas");
     }
+  }
+
+  void disconnect() {
+    port.close();
   }
 }

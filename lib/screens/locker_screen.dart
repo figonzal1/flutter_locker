@@ -15,11 +15,15 @@ class LockerPageStatus extends StatefulWidget {
 class _LockerPageState extends State<LockerPageStatus> {
   late Locker myLocker;
   bool isPortConnected = false;
+
+  String placaActual = "";
   List<String> placaDetectada = [];
 
   @override
   void initState() {
     super.initState();
+
+    logger.d("Init state");
 
     myLocker = Locker();
 
@@ -32,12 +36,25 @@ class _LockerPageState extends State<LockerPageStatus> {
         });
       });
 
-      myLocker.checkConnectedMotherBoards();
+      myLocker.checkConnectedMotherBoards((placa) {
+        setState(() {
+          placaActual = placa.toString();
+        });
+      });
     }
 
     setState(() {
       isPortConnected = result;
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    logger.d("Dispose ...");
+
+    //myLocker.disconnect();
   }
 
   @override
@@ -61,6 +78,12 @@ class _LockerPageState extends State<LockerPageStatus> {
                             fontSize: 35,
                             fontWeight: FontWeight.bold,
                             color: Colors.greenAccent),
+                      ),
+                      Text(
+                        "ESCANEANDO PLACA: $placaActual",
+                        style: const TextStyle(
+                            fontStyle: FontStyle.italic,
+                            fontWeight: FontWeight.bold),
                       ),
                       Text("ID's Placas detectadas: $placaDetectada")
                     ],
