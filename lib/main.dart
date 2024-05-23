@@ -1,7 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_locker/locker.dart';
 import 'package:flutter_locker/screens/door_status.dart';
+import 'package:flutter_locker/screens/locker_screen.dart';
 import 'package:flutter_locker/screens/qr_reader.dart';
 import 'package:flutter_locker/utils.dart';
 import 'package:logger/logger.dart';
@@ -9,6 +10,8 @@ import 'package:logger/logger.dart';
 var logger = Logger();
 
 void main() {
+  logger.t("Hex to list ${hexToList('8A010111')}");
+  logger.d(calculateBCC("80 03 00 33"));
   runApp(const MyApp());
 }
 
@@ -127,6 +130,18 @@ class _MyHomePageState extends State<MyHomePage> {
                 }));
               },
               child: const Text("QR Reader"),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            MaterialButton(
+              color: Theme.of(context).colorScheme.inversePrimary,
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return const LockerPageStatus();
+                }));
+              },
+              child: const Text("Locker Page"),
             ),
           ],
         ),
