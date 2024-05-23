@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_locker/locker.dart';
 import 'package:flutter_locker/screens/door_status.dart';
 import 'package:flutter_locker/screens/locker_screen.dart';
 import 'package:flutter_locker/screens/qr_reader.dart';

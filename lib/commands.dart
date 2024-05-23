@@ -1,4 +1,3 @@
-import 'package:flutter_locker/screens/door_status.dart';
 import 'package:flutter_locker/utils.dart';
 
 class CommandBuilder {
