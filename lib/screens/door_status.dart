@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_locker/utils.dart';
 import 'package:logger/logger.dart';
 import 'package:serial_port_win32/serial_port_win32.dart';
@@ -39,7 +40,7 @@ class _DoorStatusState extends State<DoorStatus> {
 
     logger.d(ports);
 
-    port = SerialPort("COM4",
+    port = SerialPort("COM3",
         openNow: false, BaudRate: 9600, ByteSize: 8, StopBits: 1);
     openSerialPort();
   }
@@ -64,37 +65,36 @@ class _DoorStatusState extends State<DoorStatus> {
     }
   }
 
-  void openLocker(String decoded) {
+  void openLocker() {
     logger.d("Abrir puerta");
 
-    if (decoded.contains("kucoin")) {
-      port.writeBytesFromString(hexToString("8A0101119B"));
-    }
+    var result = hexToUint8List("8A 01 01 11 9B");
+    logger.d("Comando enviado: ${separateHex("8A 01 01 11 9B")}");
+
+    port.writeBytesFromUint8List(result);
   }
 
   void readStatus() {
     logger.d("Leyendo estados");
     port.readBytesOnListen(8, (value) {
-      logger.d("Value reader $value");
+      String hexDecode = uint8ListToHex(value);
+      Map<String, String> list = separateHex(hexDecode);
 
-      var hexDecode = uint8ListToHex(value);
-
-      logger.d("Value reader decode: $hexDecode");
-      var list = separateString(hexDecode);
+      logger.d("Comando recibido: $list");
 
       //Hex to decimal
-      var positionDoor = int.parse(list[2]!, radix: 16);
+      var positionDoor = int.parse(list['channel']!, radix: 16);
 
-      logger.i("Codigo puerta: ${list[2]} - $positionDoor");
+      logger.i("Codigo puerta: ${list['channel']!} - $positionDoor");
 
       setState(() {
         //Abierto
-        if (list[3] == "00") {
+        if (list['function'] == "00") {
           doorStates[positionDoor - 1] = true;
         }
 
         //Cerrado
-        if (list[3] == "11") {
+        if (list['function'] == "11") {
           doorStates[positionDoor - 1] = false;
         }
       });
@@ -108,24 +108,37 @@ class _DoorStatusState extends State<DoorStatus> {
         title: const Text("Door status"),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
-      body: GridView.count(
-        crossAxisCount: 2,
-        childAspectRatio: 5,
-        children: List.generate(12, (index) {
-          return ListTile(
-            dense: true,
-            title: Text("Puerta ${index + 1}"),
-            subtitle: doorStates[index] != null
-                ? (doorStates[index] == true
-                    ? const Text(
-                        "Estado: Abierto",
-                        style: TextStyle(color: Colors.red, fontSize: 30),
-                      )
-                    : const Text("Estado: Cerrado",
-                        style: TextStyle(color: Colors.green, fontSize: 30)))
-                : const Text("Estado undefined"),
-          );
-        }),
+      body: Column(
+        children: [
+          Expanded(
+            child: GridView.count(
+              crossAxisCount: 2,
+              childAspectRatio: 5,
+              children: List.generate(12, (index) {
+                return ListTile(
+                  dense: true,
+                  title: Text("Puerta ${index + 1}"),
+                  subtitle: doorStates[index] != null
+                      ? (doorStates[index] == true
+                          ? const Text(
+                              "Estado: Abierto",
+                              style: TextStyle(color: Colors.red, fontSize: 30),
+                            )
+                          : const Text("Estado: Cerrado",
+                              style:
+                                  TextStyle(color: Colors.green, fontSize: 30)))
+                      : const Text("Estado undefined"),
+                );
+              }),
+            ),
+          ),
+          MaterialButton(
+            onPressed: () {
+              openLocker();
+            },
+            child: Text("Open locker"),
+          )
+        ],
       ),
     );
   }

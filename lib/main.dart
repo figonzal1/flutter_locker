@@ -1,15 +1,10 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_barcode_listener/flutter_barcode_listener.dart';
 import 'package:flutter_locker/screens/door_status.dart';
 import 'package:flutter_locker/screens/qr_reader.dart';
-import 'package:flutter_locker/second_screen.dart';
 import 'package:flutter_locker/utils.dart';
 import 'package:logger/logger.dart';
-import 'package:serial_port_win32/serial_port_win32.dart';
-import 'package:visibility_detector/visibility_detector.dart';
 
 var logger = Logger();
 
@@ -121,7 +116,7 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               child: const Text("Door Status"),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             MaterialButton(
