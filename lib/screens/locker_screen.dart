@@ -106,8 +106,13 @@ class _LockerPageState extends State<LockerPageStatus> {
                   )),
           ),
           MaterialButton(
-            onPressed: () {
-              //myLocker.checkConnectedMotherBoardById(idMb: 2);
+            onPressed: () async {
+              myLocker.checkConnectedMotherBoardById(idMb: 1);
+
+              //Delay requerido para que placa procese el siguiente comando
+              await Future.delayed(const Duration(seconds: 1));
+
+              //Abrir puerta - ID placa + Id locker box
               myLocker.tryOpenDoor("0101");
             },
             child: Text("Apertura de locker P1-C1"),

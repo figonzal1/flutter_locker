@@ -104,7 +104,7 @@ class Locker {
 
     if (port.isOpened) {
       logger.d(
-          "Intentando abrir puerta: $mbDec [$mbHex] - $lockerBoxDec [$lockerBoxHex]");
+          "Intentando abrir puerta: Placa -> $mbDec [$mbHex] - Locker Box -> $lockerBoxDec [$lockerBoxHex]");
       String command = CommandBuilder.openLockerBox(mbDec, lockerBoxDec);
 
       port.writeBytesFromUint8List(hexToUint8List(command));
