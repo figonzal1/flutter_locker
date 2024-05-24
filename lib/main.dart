@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_locker/screens/door_status.dart';
+import 'package:flutter_locker/screens/leds_screen.dart';
 import 'package:flutter_locker/screens/locker_screen.dart';
 import 'package:flutter_locker/screens/qr_reader.dart';
 import 'package:flutter_locker/utils.dart';
@@ -141,6 +142,18 @@ class _MyHomePageState extends State<MyHomePage> {
                 }));
               },
               child: const Text("Locker Page"),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            MaterialButton(
+              color: Theme.of(context).colorScheme.inversePrimary,
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return const LedsPageStatus();
+                }));
+              },
+              child: const Text("Leds Page"),
             ),
           ],
         ),

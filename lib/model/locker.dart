@@ -111,6 +111,12 @@ class Locker {
     }
   }
 
+  void sendData(String hex) {
+
+    logger.d("Sending data $hex");
+    port.writeBytesFromString(hex,includeZeroTerminator: false);
+  }
+
   void disconnect() {
     port.close();
   }
