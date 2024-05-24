@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_locker/screens/door_leds_screen.dart';
 import 'package:flutter_locker/screens/door_status.dart';
 import 'package:flutter_locker/screens/leds_screen.dart';
 import 'package:flutter_locker/screens/locker_screen.dart';
@@ -154,6 +155,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 }));
               },
               child: const Text("Leds Page"),
+            ),
+            MaterialButton(
+              color: Theme.of(context).colorScheme.inversePrimary,
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return const DoorLedsPage();
+                }));
+              },
+              child: const Text("DOOR + LEDS Page"),
             ),
           ],
         ),

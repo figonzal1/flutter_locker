@@ -18,6 +18,26 @@ class Locker {
     logger.d("Detected ports: $ports");
   }
 
+  bool connectTo(String serialName) {
+    _getPorts();
+
+    try {
+      port = SerialPort(serialName,
+          openNow: true, BaudRate: 9600, ByteSize: 8, StopBits: 1);
+
+      if (port.isOpened) {
+        logger.d("Puerto $serialName: abierto correctamente");
+        return true;
+      } else {
+        logger.e("Puerto $serialName: apertura fallida");
+        return false;
+      }
+    } on Exception catch (e) {
+      logger.f("Puerto $serialName: conexión fallida");
+      return false;
+    }
+  }
+
   bool tryToConnect() {
     _getPorts();
 
@@ -112,9 +132,8 @@ class Locker {
   }
 
   void sendData(String hex) {
-
     logger.d("Sending data $hex");
-    port.writeBytesFromString(hex,includeZeroTerminator: false);
+    port.writeBytesFromString(hex, includeZeroTerminator: false);
   }
 
   void disconnect() {
