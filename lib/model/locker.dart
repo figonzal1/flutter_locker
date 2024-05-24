@@ -7,7 +7,7 @@ var logger = Logger();
 
 const CMD_SELECT_ALL_STATES_SIZE = 8;
 
-typedef Callback = void Function(int place);
+typedef Callback = void Function(int placa);
 
 class Locker {
   late List<String> ports;
