@@ -24,18 +24,23 @@ class Locker {
     if (ports.isNotEmpty && ports.first.isNotEmpty) {
       final firstPort = ports.first;
 
-      port = SerialPort(firstPort,
-          openNow: true, BaudRate: 9600, ByteSize: 8, StopBits: 1);
+      try {
+        port = SerialPort(firstPort,
+            openNow: true, BaudRate: 9600, ByteSize: 8, StopBits: 1);
 
-      if (port.isOpened) {
-        logger.d("Puerto $firstPort: abierto correctamente");
-        return true;
-      } else {
-        logger.e("Puerto $firstPort: conexión fallida");
+        if (port.isOpened) {
+          logger.d("Puerto $firstPort: abierto correctamente");
+          return true;
+        } else {
+          logger.e("Puerto $firstPort: apertura fallida");
+          return false;
+        }
+      } on Exception catch (e) {
+        logger.f("Puerto $firstPort: conexión fallida");
         return false;
       }
     } else {
-      logger.f("Puertos vacios");
+      logger.f("No hay puertos detectados");
       return false;
     }
   }
@@ -56,17 +61,25 @@ class Locker {
         if (listado.length == CMD_SELECT_ALL_STATES_SIZE) {
           var placa = hexToDec(listado[1]);
 
-          logger.d("Comando para consultar todo. Placa: $placa");
+          logger.d("Detectado comando READ_ALL para Placa: $placa");
           callback(placa);
         }
       });
     }
   }
 
+  void checkConnectedMotherBoardById({required int idMb}) {
+    if (port.isOpened) {
+      String command = CommandBuilder.scanMotherBoardById(idMb: idMb);
+
+      logger.d("Command by id: $command");
+      port.writeBytesFromUint8List(hexToUint8List(command));
+    }
+  }
+
   Future<void> checkConnectedMotherBoards(Callback callback) async {
     if (port.isOpened) {
-      CommandBuilder builder = CommandBuilder();
-      List<String> comandos = builder.readAllMotherBoards();
+      List<String> comandos = CommandBuilder.scanAllMotherBoards();
 
       for (int i = 0; i < comandos.length; i++) {
         callback(i + 1);
@@ -80,11 +93,21 @@ class Locker {
     }
   }
 
-  void tryOpenDoor(int motherBoard, int door) {
-    if (port.isOpened) {
-      CommandBuilder builder = CommandBuilder();
+  void tryOpenDoor(String hexMbDoor) {
+    List<String> listado = hexToList(hexMbDoor);
 
-      builder.openDoor(motherBoard, door);
+    String mbHex = listado[0];
+    String lockerBoxHex = listado[1];
+
+    int mbDec = hexToDec(mbHex);
+    int lockerBoxDec = hexToDec(lockerBoxHex);
+
+    if (port.isOpened) {
+      logger.d(
+          "Intentando abrir puerta: $mbDec [$mbHex] - $lockerBoxDec [$lockerBoxHex]");
+      String command = CommandBuilder.openLockerBox(mbDec, lockerBoxDec);
+
+      port.writeBytesFromUint8List(hexToUint8List(command));
     }
   }
 

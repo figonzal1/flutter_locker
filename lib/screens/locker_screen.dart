@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_locker/locker.dart';
+import 'package:flutter_locker/model/locker.dart';
 import 'package:logger/logger.dart';
 
 var logger = Logger();
@@ -36,13 +36,11 @@ class _LockerPageState extends State<LockerPageStatus> {
         });
       });
 
-      myLocker.checkConnectedMotherBoards((placa) {
+      /*myLocker.checkConnectedMotherBoards((placa) {
         setState(() {
           placaActual = placa.toString();
         });
-      });
-
-      //myLocker.tryOpenDoor(1, 1);
+      });*/
     }
 
     setState(() {
@@ -107,6 +105,13 @@ class _LockerPageState extends State<LockerPageStatus> {
                     ],
                   )),
           ),
+          MaterialButton(
+            onPressed: () {
+              //myLocker.checkConnectedMotherBoardById(idMb: 2);
+              myLocker.tryOpenDoor("0101");
+            },
+            child: Text("Apertura de locker P1-C1"),
+          )
         ],
       ),
     );
