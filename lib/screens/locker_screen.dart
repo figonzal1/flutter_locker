@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_locker/model/locker.dart';
+import 'package:lockwise_serial_lib/lockwise_serial_lib.dart';
+import 'package:lockwise_serial_lib/model/enum_events.dart';
 import 'package:logger/logger.dart';
 
 var logger = Logger();
@@ -13,7 +14,7 @@ class LockerPageStatus extends StatefulWidget {
 }
 
 class _LockerPageState extends State<LockerPageStatus> {
-  late Locker myLocker;
+  late LockerPort lockerPort;
   bool isPortConnected = false;
 
   String placaActual = "";
@@ -25,16 +26,46 @@ class _LockerPageState extends State<LockerPageStatus> {
 
     logger.d("Init state");
 
-    myLocker = Locker();
+    lockerPort = LockerPort();
 
-    bool result = myLocker.tryToConnect();
+    bool result = lockerPort.connectPort(portName: "COM4");
 
     if (result) {
-      myLocker.listenEvents((placa) {
+      //Callback para lockerBox
+      lBoxCallback(LockerBoxEvent event) {
+        if (event == LockerBoxEvent.AUTO_OPEN) {
+          print("Puerta abierta automaticamente");
+        }
+
+        if (event == LockerBoxEvent.CLOSE) {
+          print("Cierre detectado");
+        }
+
+        if (event == LockerBoxEvent.FAILED_OPEN) {
+          print("Apertura fallida");
+        }
+
+        if (event == LockerBoxEvent.MANUAL_OPEN) {
+          print("Apertura manual de puerta detectada");
+        }
+      }
+
+      mBoardCallback(MBoardEvent event, int idMBoard) {
+        if (event == MBoardEvent.CONNECTED) {
+          print("Placa $idMBoard conectada");
+        }
+      }
+
+      //Suscribirse a eventos
+      lockerPort.subscribeToLockerBoxEvents(
+          lBoxCallback: lBoxCallback, mBoardCallback: mBoardCallback);
+
+      //lockerPort.subscribeToEvents();
+      /*myLocker.listenEvents((placa) {
         setState(() {
           placaDetectada.add(placa.toString());
         });
-      });
+      });*/
 
       /*myLocker.checkConnectedMotherBoards((placa) {
         setState(() {
@@ -107,13 +138,14 @@ class _LockerPageState extends State<LockerPageStatus> {
           ),
           MaterialButton(
             onPressed: () async {
-              myLocker.checkConnectedMotherBoardById(idMb: 1);
+              //bool sended =
+              //    lockerPort.openLockerBox(idMBoard: 1, idLockerBox: 1);
 
-              //Delay requerido para que placa procese el siguiente comando
-              await Future.delayed(const Duration(seconds: 1));
+              //print("Comando enviado: $sended");
 
-              //Abrir puerta - ID placa + Id locker box
-              myLocker.tryOpenDoor("0101");
+              //await Future.delayed(Durations.extralong4);
+
+              lockerPort.checkMBoardConnectedById(idMBoard: 1);
             },
             child: Text("Apertura de locker P1-C1"),
           )

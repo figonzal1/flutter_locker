@@ -39,6 +39,8 @@ dependencies:
   logger: ^2.3.0
   flutter_barcode_listener: ^0.1.4
   visibility_detector: ^0.4.0+2
+  lockwise_serial_lib:
+    path: ../lockwise_serial_lib
 
 dev_dependencies:
   flutter_test:
