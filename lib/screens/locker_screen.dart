@@ -35,18 +35,14 @@ class _LockerPageState extends State<LockerPageStatus> {
       lBoxCallback(LockerBoxEvent event) {
         if (event == LockerBoxEvent.AUTO_OPEN) {
           print("Puerta abierta automaticamente");
-        }
-
-        if (event == LockerBoxEvent.CLOSE) {
-          print("Cierre detectado");
-        }
-
-        if (event == LockerBoxEvent.FAILED_OPEN) {
+        } else if (event == LockerBoxEvent.AUTO_OPEN_FAILED) {
           print("Apertura fallida");
         }
 
         if (event == LockerBoxEvent.MANUAL_OPEN) {
           print("Apertura manual de puerta detectada");
+        } else if (event == LockerBoxEvent.MANUAL_CLOSE) {
+          print("Cierre detectado");
         }
       }
 
@@ -57,8 +53,7 @@ class _LockerPageState extends State<LockerPageStatus> {
       }
 
       //Suscribirse a eventos
-      lockerPort.subscribeToLockerBoxEvents(
-          lBoxCallback: lBoxCallback, mBoardCallback: mBoardCallback);
+      lockerPort.subscribeToLockerBoxEvents(lBoxCallback: lBoxCallback);
 
       //lockerPort.subscribeToEvents();
       /*myLocker.listenEvents((placa) {
