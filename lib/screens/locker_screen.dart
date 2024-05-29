@@ -34,15 +34,17 @@ class _LockerPageState extends State<LockerPageStatus> {
       //Callback para lockerBox
       lBoxCallback(LockerBoxEvent event) {
         if (event == LockerBoxEvent.AUTO_OPEN) {
-          print("Puerta abierta automaticamente");
+          print("Apertura automática");
         } else if (event == LockerBoxEvent.AUTO_OPEN_FAILED) {
           print("Apertura fallida");
+        } else if (event == LockerBoxEvent.AUTO_OPEN_CONFIRMED) {
+          print("Apertura automática confirmada");
         }
 
         if (event == LockerBoxEvent.MANUAL_OPEN) {
           print("Apertura manual de puerta detectada");
         } else if (event == LockerBoxEvent.MANUAL_CLOSE) {
-          print("Cierre detectado");
+          print("Cierre manual detectado");
         }
       }
 
@@ -133,14 +135,14 @@ class _LockerPageState extends State<LockerPageStatus> {
           ),
           MaterialButton(
             onPressed: () async {
-              //bool sended =
-              //    lockerPort.openLockerBox(idMBoard: 1, idLockerBox: 1);
+              bool sended =
+                  lockerPort.openLockerBox(idMBoard: 2, idLockerBox: 1);
 
-              //print("Comando enviado: $sended");
+              print("Comando enviado: $sended");
 
               //await Future.delayed(Durations.extralong4);
 
-              lockerPort.checkMBoardConnectedById(idMBoard: 1);
+              //lockerPort.checkMBoardConnectedById(idMBoard: 1);
             },
             child: Text("Apertura de locker P1-C1"),
           )
