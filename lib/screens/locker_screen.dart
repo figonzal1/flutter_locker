@@ -147,7 +147,7 @@ class _LockerPageState extends State<LockerPageStatus> {
           MaterialButton(
             color: Theme.of(context).colorScheme.inversePrimary,
             onPressed: () async {
-              lockerBox.checkLockerBoxStatus(idMBoard: 1, idLockerBox: 1);
+              lockerBox.checkLockerBoxStatus(idElectricPanel: "01_01");
             },
             child: const Text("LockerBox status P1-L1"),
           ),
@@ -157,7 +157,7 @@ class _LockerPageState extends State<LockerPageStatus> {
           MaterialButton(
             color: Theme.of(context).colorScheme.inversePrimary,
             onPressed: () async {
-              lockerBox.checkLockerBoxStatus(idMBoard: 1, idLockerBox: 2);
+              lockerBox.checkLockerBoxStatus(idElectricPanel: "01_02");
             },
             child: const Text("LockerBox status P1-L2"),
           ),
@@ -167,8 +167,7 @@ class _LockerPageState extends State<LockerPageStatus> {
           MaterialButton(
             color: Theme.of(context).colorScheme.inversePrimary,
             onPressed: () async {
-              bool sended =
-                  lockerBox.openLockerBox(idMBoard: 1, idLockerBox: 1);
+              bool sended = lockerBox.openLockerBox(idElectricPanel: "01_01");
 
               print("Comando enviado: $sended");
             },
