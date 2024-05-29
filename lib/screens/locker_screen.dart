@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:lockwise_serial_lib/lockwise_serial_lib.dart';
+import 'package:lockwise_serial_lib/locker_box.dart';
 import 'package:lockwise_serial_lib/model/enum_events.dart';
 import 'package:logger/logger.dart';
 
@@ -14,7 +14,7 @@ class LockerPageStatus extends StatefulWidget {
 }
 
 class _LockerPageState extends State<LockerPageStatus> {
-  late LockerPort lockerPort;
+  late LockerBox lockerBox;
   bool isPortConnected = false;
 
   String placaActual = "";
@@ -26,9 +26,9 @@ class _LockerPageState extends State<LockerPageStatus> {
 
     logger.d("Init state");
 
-    lockerPort = LockerPort();
+    lockerBox = LockerBox();
 
-    bool result = lockerPort.connectPort(portName: "COM4");
+    bool result = lockerBox.connectPort(portName: "COM4");
 
     if (result) {
       //Callback para lockerBox (OPERACIONES)
@@ -64,7 +64,7 @@ class _LockerPageState extends State<LockerPageStatus> {
       }
 
       //Suscribirse a eventos
-      lockerPort.subscribeToLockerBoxEvents(
+      lockerBox.subscribeToLockerBoxEvents(
           lBoxOpCallback: lBoxOpCallback,
           lBoxStatusCallback: lBoxStatusCallback);
 
@@ -147,7 +147,7 @@ class _LockerPageState extends State<LockerPageStatus> {
           MaterialButton(
             color: Theme.of(context).colorScheme.inversePrimary,
             onPressed: () async {
-              lockerPort.checkLockerBoxStatus(idMBoard: 1, idLockerBox: 1);
+              lockerBox.checkLockerBoxStatus(idMBoard: 1, idLockerBox: 1);
             },
             child: const Text("LockerBox status P1-L1"),
           ),
@@ -157,7 +157,7 @@ class _LockerPageState extends State<LockerPageStatus> {
           MaterialButton(
             color: Theme.of(context).colorScheme.inversePrimary,
             onPressed: () async {
-              lockerPort.checkLockerBoxStatus(idMBoard: 1, idLockerBox: 2);
+              lockerBox.checkLockerBoxStatus(idMBoard: 1, idLockerBox: 2);
             },
             child: const Text("LockerBox status P1-L2"),
           ),
@@ -168,7 +168,7 @@ class _LockerPageState extends State<LockerPageStatus> {
             color: Theme.of(context).colorScheme.inversePrimary,
             onPressed: () async {
               bool sended =
-                  lockerPort.openLockerBox(idMBoard: 1, idLockerBox: 1);
+                  lockerBox.openLockerBox(idMBoard: 1, idLockerBox: 1);
 
               print("Comando enviado: $sended");
             },

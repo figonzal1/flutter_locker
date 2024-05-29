@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:lockwise_serial_lib/lockwise_serial_leds.dart';
+import 'package:lockwise_serial_lib/locker_leds.dart';
 import 'package:logger/logger.dart';
 
 var logger = Logger();
@@ -93,7 +93,7 @@ class _LedsPageState extends State<LedsPage> {
               MaterialButton(
                 color: Theme.of(context).colorScheme.inversePrimary,
                 onPressed: () async {
-                  lockerLeds.turnOn(0, "green");
+                  lockerLeds.turnOn(idLed: 1, color: "green");
                 },
                 child: const Text("Encender led 1 verde"),
               ),
@@ -103,7 +103,7 @@ class _LedsPageState extends State<LedsPage> {
               MaterialButton(
                 color: Theme.of(context).colorScheme.inversePrimary,
                 onPressed: () async {
-                  lockerLeds.turnOff(0);
+                  lockerLeds.turnOff(idLed: 1);
                 },
                 child: const Text("Apagar led 1"),
               ),
@@ -118,7 +118,7 @@ class _LedsPageState extends State<LedsPage> {
               MaterialButton(
                 color: Theme.of(context).colorScheme.inversePrimary,
                 onPressed: () async {
-                  lockerLeds.turnOn(1, "red");
+                  lockerLeds.turnOn(idLed: 2, color: "red");
                 },
                 child: const Text("Encender led 2 rojo"),
               ),
@@ -128,7 +128,7 @@ class _LedsPageState extends State<LedsPage> {
               MaterialButton(
                 color: Theme.of(context).colorScheme.inversePrimary,
                 onPressed: () async {
-                  lockerLeds.turnOff(1);
+                  lockerLeds.turnOff(idLed: 2);
                 },
                 child: const Text("Apagar led 2"),
               ),
@@ -143,7 +143,7 @@ class _LedsPageState extends State<LedsPage> {
               MaterialButton(
                 color: Theme.of(context).colorScheme.inversePrimary,
                 onPressed: () async {
-                  lockerLeds.blink(0);
+                  lockerLeds.blink(1);
                 },
                 child: const Text("Blink led 1"),
               ),
@@ -153,7 +153,7 @@ class _LedsPageState extends State<LedsPage> {
               MaterialButton(
                 color: Theme.of(context).colorScheme.inversePrimary,
                 onPressed: () async {
-                  lockerLeds.blink(1);
+                  lockerLeds.blink(2);
                 },
                 child: const Text("Blink led 2"),
               ),

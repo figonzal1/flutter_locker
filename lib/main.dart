@@ -5,7 +5,6 @@ import 'package:flutter_locker/screens/led_screen.dart';
 import 'package:flutter_locker/screens/locker_screen.dart';
 import 'package:flutter_locker/screens/qr_reader.dart';
 import 'package:flutter_locker/utils.dart';
-import 'package:lockwise_serial_lib/lockwise_serial_leds.dart';
 import 'package:logger/logger.dart';
 
 var logger = Logger();
