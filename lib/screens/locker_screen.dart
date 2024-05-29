@@ -31,31 +31,42 @@ class _LockerPageState extends State<LockerPageStatus> {
     bool result = lockerPort.connectPort(portName: "COM4");
 
     if (result) {
-      //Callback para lockerBox
-      lBoxCallback(LockerBoxEvent event) {
-        if (event == LockerBoxEvent.AUTO_OPEN) {
-          print("Apertura automática");
-        } else if (event == LockerBoxEvent.AUTO_OPEN_FAILED) {
+      //Callback para lockerBox (OPERACIONES)
+      lBoxOpCallback(LBoxOpEvent opEvent) {
+        if (opEvent == LBoxOpEvent.AUTO_OPEN) {
+          print("Apertura automática no confirmada");
+        } else if (opEvent == LBoxOpEvent.AUTO_OPEN_FAILED) {
           print("Apertura fallida");
-        } else if (event == LockerBoxEvent.AUTO_OPEN_CONFIRMED) {
+        } else if (opEvent == LBoxOpEvent.AUTO_OPEN_CONFIRMED) {
           print("Apertura automática confirmada");
         }
 
-        if (event == LockerBoxEvent.MANUAL_OPEN) {
+        if (opEvent == LBoxOpEvent.MANUAL_OPEN) {
           print("Apertura manual de puerta detectada");
-        } else if (event == LockerBoxEvent.MANUAL_CLOSE) {
+        } else if (opEvent == LBoxOpEvent.MANUAL_CLOSE) {
           print("Cierre manual detectado");
         }
       }
 
-      mBoardCallback(MBoardEvent event, int idMBoard) {
-        if (event == MBoardEvent.CONNECTED) {
+      //Callback para consultas de estado para locker box's
+      lBoxStatusCallback(LBoxStatus statusEvent, int idLBox) {
+        if (statusEvent == LBoxStatus.OPEN) {
+          print("LockerBOX, id $idLBox -> abierta");
+        } else if (statusEvent == LBoxStatus.CLOSE) {
+          print("LockerBOX, id $idLBox -> cerrada");
+        }
+      }
+
+      mBoardCallback(MBoardStatus mBoardStatus, int idMBoard) {
+        if (mBoardStatus == MBoardStatus.CONNECTED) {
           print("Placa $idMBoard conectada");
         }
       }
 
       //Suscribirse a eventos
-      lockerPort.subscribeToLockerBoxEvents(lBoxCallback: lBoxCallback);
+      lockerPort.subscribeToLockerBoxEvents(
+          lBoxOpCallback: lBoxOpCallback,
+          lBoxStatusCallback: lBoxStatusCallback);
 
       //lockerPort.subscribeToEvents();
       /*myLocker.listenEvents((placa) {
@@ -134,17 +145,34 @@ class _LockerPageState extends State<LockerPageStatus> {
                   )),
           ),
           MaterialButton(
+            color: Theme.of(context).colorScheme.inversePrimary,
+            onPressed: () async {
+              lockerPort.checkLockerBoxStatus(idMBoard: 1, idLockerBox: 1);
+            },
+            child: const Text("LockerBox status P1-L1"),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          MaterialButton(
+            color: Theme.of(context).colorScheme.inversePrimary,
+            onPressed: () async {
+              lockerPort.checkLockerBoxStatus(idMBoard: 1, idLockerBox: 2);
+            },
+            child: const Text("LockerBox status P1-L2"),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          MaterialButton(
+            color: Theme.of(context).colorScheme.inversePrimary,
             onPressed: () async {
               bool sended =
-                  lockerPort.openLockerBox(idMBoard: 2, idLockerBox: 1);
+                  lockerPort.openLockerBox(idMBoard: 1, idLockerBox: 1);
 
               print("Comando enviado: $sended");
-
-              //await Future.delayed(Durations.extralong4);
-
-              //lockerPort.checkMBoardConnectedById(idMBoard: 1);
             },
-            child: Text("Apertura de locker P1-C1"),
+            child: const Text("Apertura de locker box P1-L1"),
           )
         ],
       ),
