@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_locker/screens/door_status.dart';
 import 'package:flutter_locker/screens/led_screen.dart';
 import 'package:flutter_locker/screens/locker_screen.dart';
-import 'package:flutter_locker/screens/qr_reader.dart';
 import 'package:flutter_locker/utils.dart';
 import 'package:logger/logger.dart';
 
@@ -106,30 +104,6 @@ class _MyHomePageState extends State<MyHomePage> {
             const Text(
               "Prototipo QR-SerialPort",
               style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            MaterialButton(
-              color: Theme.of(context).colorScheme.inversePrimary,
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return const DoorStatus();
-                }));
-              },
-              child: const Text("Door Status"),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            MaterialButton(
-              color: Theme.of(context).colorScheme.inversePrimary,
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return QrReader();
-                }));
-              },
-              child: const Text("QR Reader"),
             ),
             const SizedBox(
               height: 20,
