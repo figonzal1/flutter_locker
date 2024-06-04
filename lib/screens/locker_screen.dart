@@ -28,7 +28,7 @@ class _LockerPageState extends State<LockerPageStatus> {
 
     lockerBox = LockerBox();
 
-    bool result = lockerBox.connectPort(portName: "COM4");
+    bool result = lockerBox.connectPort(portName: "COM11");
 
     if (result) {
       //Callback para lockerBox (OPERACIONES)
@@ -52,7 +52,7 @@ class _LockerPageState extends State<LockerPageStatus> {
       lBoxStatusCallback(LBoxStatus statusEvent, int idLBox) {
         if (statusEvent == LBoxStatus.OPEN) {
           print("LockerBOX, id $idLBox -> abierta");
-        } else if (statusEvent == LBoxStatus.CLOSE) {
+        } else if (statusEvent == LBoxStatus.CLOSED) {
           print("LockerBOX, id $idLBox -> cerrada");
         }
       }
@@ -66,7 +66,8 @@ class _LockerPageState extends State<LockerPageStatus> {
       //Suscribirse a eventos
       lockerBox.subscribeToLockerBoxEvents(
           lBoxOpCallback: lBoxOpCallback,
-          lBoxStatusCallback: lBoxStatusCallback);
+          lBoxStatusCallback: lBoxStatusCallback, //Opcional
+          mBoardStatusCallback: mBoardCallback); //Opcional
 
       //lockerPort.subscribeToEvents();
       /*myLocker.listenEvents((placa) {
